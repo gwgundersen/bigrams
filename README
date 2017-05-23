@@ -1,0 +1,9 @@
+Bigram model
+~~~~~~~~~~~~
+
+Estimates the probability of word_n given word_{n-1} using the formula:
+
+P(w_n | w_{n-1}) = P(w_{n-1}, w_n) / P(w_{n})
+                 = count(w_{n-1}, w_n) / count(w_{n})
+
+This Markovian assumption captures local similarities to an analyzed text corpus but not global ones.
