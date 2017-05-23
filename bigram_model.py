@@ -33,19 +33,16 @@ class BigramModel(object):
             w = self.start_words[r]
             sentence = [w]
         while len(sentence) < max_length:
-            w = self._gen_next_word(self.bigram_p, w, num_top_words)
+            w = self.gen_next_word(w, num_top_words)
             if w is None:
                 break
             sentence.append(w)
         sentence = [s for s in sentence if s != self.START and s != self.STOP]
         return ' '.join(sentence)
 
-# Private methods
-# -----------------------------------------------------------------------------
-
-    def _gen_next_word(self, bigram_p, w0, num_top_words):
+    def gen_next_word(self, w0, num_top_words):
         probs = []
-        for b, p in bigram_p.items():
+        for b, p in self.bigram_p.items():
             w1, w2 = b
             if w0 and w1 == w0:
                 probs.append((w2, p))
@@ -56,6 +53,9 @@ class BigramModel(object):
         top_words = sorted(probs, key=lambda x: x[1])[-num_top_words:]
         r = random.randint(0, len(top_words)-1)
         return top_words[r][0]
+
+# Private methods
+# -----------------------------------------------------------------------------
 
     def _calc_unigrams(self, corpus):
         unigram_c = {}
