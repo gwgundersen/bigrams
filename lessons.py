@@ -15,12 +15,10 @@ def main():
     bm.fit(corpus)
 
     with open('fake_lessons.txt', 'w+') as out:
-        for _ in range(1000):
-            print(_)
-            r1 = random.randint(10, 30)
-            r2 = random.randint(2, 5)
-            sentence = bm.gen_sentence(max_length=r1, start_word=None,
-                                       num_top_words=r2)
+        for _ in range(100):
+            r = random.randint(5, 30)
+            sentence = bm.gen_sentence(max_length=r,
+                                       num_top_words=5)
             out.write(sentence + '\n')
 
 
@@ -32,8 +30,8 @@ def load_data():
             if len(line) > 1:
                 raise AttributeError('Data format is incorrect.')
             line = line[0].strip()
-            line = line.translate(None, string.punctuation)
-            line = line.lower()
+            #line = line.translate(None, string.punctuation)
+            #line = line.lower()
             result.append(line)
     return result
 

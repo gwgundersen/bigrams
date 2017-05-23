@@ -27,18 +27,16 @@ class BigramModel(object):
     def gen_sentence(self, max_length=10, start_word=None, num_top_words=3):
         if start_word:
             w = start_word
+            sentence = [w]
         else:
-            r = random.randint(0, len(self.start_words)-1)
+            r = random.randint(0, len(self.start_words))
             w = self.start_words[r]
-        sentence = [w]
-        while True:
+            sentence = [w]
+        while len(sentence) < max_length:
             w = self._gen_next_word(self.bigram_p, w, num_top_words)
             if w is None:
                 break
             sentence.append(w)
-            if w in self.stop_words:
-                if random.random() < 0.25 or len(sentence) >= max_length:
-                    break
         sentence = [s for s in sentence if s != self.START and s != self.STOP]
         return ' '.join(sentence)
 
@@ -49,11 +47,13 @@ class BigramModel(object):
         probs = []
         for b, p in bigram_p.items():
             w1, w2 = b
-            if w1 == w0:
+            if w0 and w1 == w0:
+                probs.append((w2, p))
+            elif not w0 and w1 == self.START:
                 probs.append((w2, p))
         if len(probs) == 0:
             return None
-        top_words = sorted(probs, key=lambda x: x[1])[:num_top_words]
+        top_words = sorted(probs, key=lambda x: x[1])[-num_top_words:]
         r = random.randint(0, len(top_words)-1)
         return top_words[r][0]
 
