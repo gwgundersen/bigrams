@@ -1,0 +1,5 @@
+venv/
+*.pyc
+data.xlsx
+data.csv
+fake_lessons.txt
